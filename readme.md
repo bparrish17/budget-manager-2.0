@@ -1,3 +1,5 @@
+_Disclaimer: My Python code is low key garbage I promise I'm better at my job :| _
+
 # Description
 
 I wanted to learn Python and also improve my Budget Manager project so here we are at *2.0*
