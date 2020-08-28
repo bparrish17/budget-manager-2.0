@@ -1,3 +1,15 @@
+# Description
+
+I wanted to learn Python and also improve my Budget Manager project so here we are at *2.0*
+
+Instead of having manually make all the organized folders and renaming files and what not that I normally do for each month's expenses using 1.0, I'm gonna use this to do it for me. It's all pretty hard-coded for this specific use case but maybe if I'm feeling _audacious_ later I'll make it a bit more functional. 
+
+Structure below kind of explains what I'm trying to do. This is just to take all of my credit card, checking account, and investment transactions that I download in CSV form and
+1. rename them
+2. move them to the right folder
+3. bring their columns and values to parity
+4. write them to my google sheet which does the rest
+
 # Structure
 
 ### File Saving
