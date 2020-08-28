@@ -1,4 +1,4 @@
-_Disclaimer: My Python code is low key garbage I promise I'm better at my job :| _
+_Disclaimer: My Python code is kinda bad I promise I'm better at my job_
 
 # Description
 
