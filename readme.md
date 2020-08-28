@@ -1,5 +1,3 @@
-_Disclaimer: My Python code is kinda bad I promise I'm better at my job_
-
 # Description
 
 I wanted to learn Python and also improve my Budget Manager project so here we are at *2.0*
