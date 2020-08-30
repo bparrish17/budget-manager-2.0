@@ -124,16 +124,3 @@ def main():
   # 2. rename each file to proper type (amex, usaa, chase)
   # 3. make directory in Budget folder by month
   # 4. add 3 files to budget / month folder
-
-
-def RESET_FOR_TESTING(new_month_dir):
-  dir_list = os.listdir(new_month_dir)
-  for file_key in dir_list:
-    try:
-      print(f'{new_month_dir}/{file_key}', '=> ', f'/Users/brianparrish/Downloads/{file_key}')
-      shutil.move(f'{new_month_dir}/{file_key}', f'/Users/brianparrish/Downloads/{file_key}')
-    except:
-      print(f'ERROR: Could not move {file_key}"\n')
-      pass
-
-  shutil.rmtree(new_month_dir)
