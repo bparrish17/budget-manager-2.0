@@ -16,8 +16,11 @@ def add_amex_row(row, sheets_data):
 
   amex_data['Date'] = row['Date']
   amex_data['Amount'] = fabs(amt)
-  amex_data['Description'] = row['Description']
-  amex_data['Category'] = row['Category'] or ''
+  amex_data['Description'] = row['Description'].lower().capitalize()
+  try:
+    amex_data['Category'] = row['Category']
+  except KeyError:
+    pass
   # todo: 
   # 1. Ignore "ONLINE PAYMENT", incomes?
   # 2. Add categories
@@ -27,7 +30,6 @@ def add_amex_row(row, sheets_data):
   else:
     sheets_data['expenses'].append(amex_data)
   
-  print('----------------------------------------- \n', row)
   return sheets_data
 
 def add_chase_row(row, sheets_data):
@@ -38,7 +40,7 @@ def add_chase_row(row, sheets_data):
     chase_data['Category'] = row['Category']
     chase_data['Date'] = row['Post Date']
     chase_data['Amount'] = fabs(amt)
-    chase_data['Description'] = row['Description']
+    chase_data['Description'] = row['Description'].lower().capitalize()
     sheets_data['expenses'].append(chase_data)
 
   return sheets_data
@@ -48,7 +50,7 @@ def add_usaa_row(row, sheets_data):
   category = row['Category']
   amt = float(row['Amount'])
   usaa_data['Date'] = row['Date']
-  usaa_data['Description'] = row['Description']
+  usaa_data['Description'] = row['Description'].lower().capitalize()
   usaa_data['Amount'] = fabs(amt)
 
   if 'Pending' not in category:
