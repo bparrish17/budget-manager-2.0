@@ -3,6 +3,7 @@ credentials-sheets.json
 token-drive.pickle
 token-sheets.pickle
 .DS_Store
+.vscode/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
