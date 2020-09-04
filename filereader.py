@@ -2,7 +2,7 @@
 import csv, os
 from math import fabs
 
-def add_csv_data_to_sheets(file_path, sheets_data, callback=None):
+def add_csv_data_to_sheets(file_path: str, sheets_data, callback=None) -> list:
   with open(file_path, newline='') as csvfile:
     reader = csv.DictReader(csvfile)
     for row in reader:
@@ -64,6 +64,11 @@ def add_usaa_row(row, sheets_data):
 
   elif amt < 0:
     if 'Schwab' in usaa_data['Description']:
+      # check for account
+      if '4547' in usaa_data['Description']:
+        row['Category'] = 'Roth'
+      elif '7820' in usaa_data['Description']:
+        row['Category'] = 'Money Market'
       sheets_data['investments'].append(usaa_data)
     else:
       sheets_data['expenses'].append(usaa_data)
@@ -73,17 +78,24 @@ def add_usaa_row(row, sheets_data):
 
   return sheets_data
 
+def print_transaction_status(transaction_type: str):
+  print(f'Processing {transaction_type.capitalize()} Transactions...')
+  print('-------------------------------------------------------------------------')
 
-def main(month_dir):
+
+def main(month_dir: str):
   sheets_data = dict({ 'expenses': [], 'incomes': [], 'investments': [] })
   dir_list = os.listdir(month_dir)
   for file in dir_list:
     path = f'{month_dir}/{file}'
     if file == 'amex.csv':
+      print_transaction_status('amex')
       add_csv_data_to_sheets(path, sheets_data, add_amex_row)
     elif file == 'chase.csv':
+      print_transaction_status('chase')
       add_csv_data_to_sheets(path, sheets_data, add_chase_row)
     elif file == 'usaa.csv':
+      print_transaction_status('usaa')
       add_csv_data_to_sheets(path, sheets_data, add_usaa_row)
 
   return sheets_data

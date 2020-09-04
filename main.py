@@ -4,13 +4,14 @@ from filereader import main as filereader
 from sheetswriter import main as sheetswriter
 from reset import main as RESET
 
-# print(expenses_sheet)
-# new_month_dir = filehandler()
+print('-------------------------------------------------------------------------')
 
-new_month_dir = '/Users/brianparrish/Documents/Home/Budgeting/2020/8 - August'
+# new_month_dir = '/Users/brianparrish/Documents/Home/Budgeting/2020/8 - August'
+new_month_dir = filehandler()
 sheets_data = filereader(new_month_dir)
 sheetswriter(sheets_data)
 
-# RESET()
+print('-------------------------------------------------------------------------')
+print('Successfully Added All Transactions!')
 
-print('Success')
+RESET()
