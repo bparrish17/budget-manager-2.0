@@ -13,5 +13,3 @@ sheetswriter(sheets_data)
 
 print('-------------------------------------------------------------------------')
 print('Successfully Added All Transactions!')
-
-RESET()

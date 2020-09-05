@@ -41,6 +41,9 @@ def add_chase_row(row, sheets_data):
     chase_data['Date'] = row['Post Date']
     chase_data['Amount'] = fabs(amt)
     chase_data['Description'] = row['Description'].lower().capitalize()
+    if 'games' in chase_data['Description']:
+      chase_data['Category'] = 'Entertainment'
+    
     sheets_data['expenses'].append(chase_data)
 
   return sheets_data
@@ -56,11 +59,16 @@ def add_usaa_row(row, sheets_data):
   if 'Pending' not in category:
     usaa_data['Category'] = category
   
-  if 'ICIMS' in usaa_data['Description']:
+  if 'icims' in usaa_data['Description'].lower():
     usaa_data['Category'] = 'Paycheck'
 
   if row['Category'] == 'Credit Card Payment':
     return
+
+  if amt == 1400:
+    usaa_data['Category'] = 'Rent'
+    usaa_data['Description'] = 'Venmo Rent Payment'
+
 
   elif amt < 0:
     if 'Schwab' in usaa_data['Description']:
@@ -83,7 +91,7 @@ def print_transaction_status(transaction_type: str):
   print('-------------------------------------------------------------------------')
 
 
-def main(month_dir: str):
+def main(month_dir: str) -> dict:
   sheets_data = dict({ 'expenses': [], 'incomes': [], 'investments': [] })
   dir_list = os.listdir(month_dir)
   for file in dir_list:
