@@ -4,34 +4,37 @@ import ezsheets
 # -- Column ('Date' | 'Amount' | 'Description' | 'Category')
 
 
-# LEFT OFF: refactoring update_sheet to only go off first column as source of truth (in case there's missing categories or amounts or whatever)
 '''
 '''
 def update_sheet(workbook, sheet_name, sheets_data):
   transaction_list = sheets_data[sheet_name.lower()]
+  transaction_list.sort(key=sort_by_date)
   column_names = ['Date', 'Amount', 'Description', 'Category']
   sheet = workbook[sheet_name]
-  for idx, column_name in enumerate(column_names, start=0):
-    col_idx = idx + 1
-    # update column by column
-    sheet_column = sheet.getColumn(col_idx)
-    idx_to_add_data = get_last_value_in_data(sheet_column)
-    new_column = get_new_column_value(column_name, idx_to_add_data, sheets_column, transaction_list)
-    sheet.updateColumn(col_idx, new_column)
+  date_column = sheet.getColumn(1)
+  idx_to_add_data = get_last_value_in_data(date_column)
 
+  # update column by column
+  for idx, column_name in enumerate(column_names, start=0):
+    col_idx = idx + 1 # column indices start at 1 in Google Sheets
+    current_column_values = sheet.getColumn(col_idx)[0:idx_to_add_data]
+    updated_column = get_new_column_value(column_name, current_column_values, transaction_list)
+    sheet.updateColumn(col_idx, updated_column)
 
 
 def get_new_column_value(
   column_name: str,
-  idx_to_add_data: int,
-  transactions
+  current_column_values: list,
+  transactions_list: list
 ):
-  sliced = current_column_values[0:idx_to_add_data]
-  new_values = [transaction[column_name] for transaction in transactions]
-  sliced.extend(new_values)
+  new_column = current_column_values.copy()
+  new_values = [transaction[column_name] for transaction in transactions_list]
+  new_column.extend(new_values)
   
-  return sliced
+  return new_column
 
+def sort_by_date(transaction: dict):
+  return transaction['Date']
 
 def get_last_value_in_data(column):
   idx_of_last_value = 0
@@ -40,12 +43,8 @@ def get_last_value_in_data(column):
       idx_of_last_value = idx
       break
 
-  print('SHAWTY: ', idx_of_last_value, column[idx_of_last_value])
-  return idx_of_last_value
+  return idx_of_last_value - 1
 
-def print_sheet_status(sheet_name: str):
-  print(f'Writing {sheet_name.capitalize()} Transactions to Google Sheets...')
-  print('-------------------------------------------------------------------------')
 
 def main(sheets_data):
   # test_spreadsheet_id = '1iRHLWOk7E_SPFO_n6Ok0xci__SUtApQGhseuOzz0ThI'
@@ -53,7 +52,8 @@ def main(sheets_data):
 
   workbook = ezsheets.Spreadsheet(budget_spreadsheet_id)
   for sheet_name in ['Expenses', 'Incomes', 'Investments']:
-    print_sheet_status(sheet_name)
+    print(f'Writing {sheet_name.capitalize()} Transactions to Google Sheets...')
+    print('-------------------------------------------------------------------------')
     update_sheet(workbook, sheet_name, sheets_data)
 
   print('\nSuccessfully Written Transactions to Google Sheets\n')
