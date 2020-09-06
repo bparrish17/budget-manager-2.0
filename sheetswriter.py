@@ -91,4 +91,4 @@ def main(sheets_data: dict):
         print('-------------------------------------------------------------------------')
         update_sheet(workbook, sheet_name, sheets_data)
 
-    print('\nSuccessfully Written Transactions to Google Sheets\n')
+    print('Successfully Written Transactions to Google Sheets!')

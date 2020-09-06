@@ -183,8 +183,3 @@ def main() -> str:
 
     print('Successfully Moved Downloaded Statement Files to Budgeting Folder')
     return new_month_dir
-
-    # 1. read from downloads by known file name
-    # 2. rename each file to proper type (amex, usaa, chase)
-    # 3. make directory in Budget folder by month
-    # 4. add 3 files to budget / month folder
