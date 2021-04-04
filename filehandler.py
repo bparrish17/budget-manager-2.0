@@ -1,5 +1,6 @@
 import os, sys, shutil
 from constants import MONTH_MAP
+from MonthDirectoryFinder import main as get_highest_month_dir
 
 
 def make_folder_at_dir(target_dir: str, name: str) -> str:
@@ -20,18 +21,6 @@ def make_folder_at_dir(target_dir: str, name: str) -> str:
         raise
     finally:
         return path
-
-
-def get_user_root_dir() -> str:
-    """
-    Gets root directory path for the current user
-    Returns (str):
-        Root directory path for that user (MacOS)
-    """
-    root_dir = os.path.dirname(os.path.abspath(__file__))
-    current_user = os.getlogin()
-    idx_for_downloads = root_dir.index(current_user) + len(current_user)
-    return f'{root_dir[0:idx_for_downloads]}'
 
 
 def find_file_by_str(arr: list, string: str) -> str:
@@ -107,38 +96,6 @@ def rename_files_by_key(parent_dir, file_dict):
 
     return new_file_paths
 
-
-def get_highest_dated_dir(parent_dir, parse_full) -> str:
-    """
-    Get the latest dated directory in existing Budgeting folder
-    Args:
-      parent_dir (str): directory to parse through
-      parse_full (bool): whether or not parse full directory list
-
-    Returns (str):
-      Highest dated directory in parent directory (e.g. '8 - August')
-    """
-    dir_list = os.listdir(parent_dir)
-    highest_val = 0
-    idx_of_highest_val = 0
-
-    for idx, directory in enumerate(dir_list, start=0):
-        try:
-            if parse_full:
-                curr_val = int(directory)
-            else:
-                curr_val = int(directory[0])
-
-            if curr_val > highest_val:
-                highest_val = curr_val
-                idx_of_highest_val = idx
-        except ValueError:
-            print(f'ERROR: ValueError at {idx} of {directory} in get_highest_dated_dir\n')
-            pass
-
-    return dir_list[idx_of_highest_val]
-
-
 def main() -> str:
     """
     File Handler for Downloaded CSVs
@@ -152,7 +109,7 @@ def main() -> str:
     """
     root_dir = get_user_root_dir()
     downloads_dir = f'{root_dir}/Downloads'
-    budgeting_dir = f'{root_dir}/Documents/Home/Budgeting'
+    budgeting_dir = f'{root_dir}/Documents/Finance'
     statement_files_dict = get_statements_from_downloads_dir(downloads_dir)
 
     # change file names
@@ -162,6 +119,8 @@ def main() -> str:
     highest_year = get_highest_dated_dir(budgeting_dir, True)
     highest_year_dir = f'{budgeting_dir}/{highest_year}'
 
+    (highest_year_dir_name, new_month_dir_name) = get_highest_month_dir()
+
     # get highest month directory from /Home/Budgeting/{highestYearDir}
     highest_month = get_highest_dated_dir(highest_year_dir, False)
 
@@ -170,7 +129,7 @@ def main() -> str:
     new_month = MONTH_MAP[new_month_num]
 
     # add new directory
-    new_month_dir = make_folder_at_dir(highest_year_dir, f'{new_month_num} - {new_month}')
+    new_month_dir = make_folder_at_dir(highest_year_dir_name, new_month_dir_name)
 
     # add files to newly created directory
     for file_key in renamed_statement_files_dict:
@@ -183,3 +142,25 @@ def main() -> str:
 
     print('Successfully Moved Downloaded Statement Files to Budgeting Folder')
     return new_month_dir
+
+def main_2():
+    root_dir = get_user_root_dir()
+    downloads_dir = f'{root_dir}/Downloads'
+
+    # Rename downloaded transaction files to expected names
+    statement_files_dict = get_statements_from_downloads_dir(downloads_dir)
+    renamed_statement_files_dict = rename_files_by_key(downloads_dir, statement_files_dict)
+
+    # Get month directory to add renamed files to
+    (highest_year_dir_name, new_month_dir_name) = get_highest_month_dir()
+    new_month_dir = make_folder_at_dir(highest_year_dir_name, new_month_dir_name)
+
+    for file_key in renamed_statement_files_dict:
+        file_path = renamed_statement_files_dict[file_key]
+        try:
+            shutil.move(file_path, f'{new_month_dir}/{file_key}')
+        except:
+            print(f'ERROR: Could not move {file_key} from {file_path} to "{new_month_dir}/{file_key}"\n')
+            pass
+
+    print('Successfully Moved Downloaded Statement Files to Budgeting Folder')
