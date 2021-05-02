@@ -1,6 +1,7 @@
 import os, sys, shutil
 from constants import MONTH_MAP
 from MonthDirectoryFinder import main as get_highest_month_dir
+from utils import get_user_root_dir
 
 
 def make_folder_at_dir(target_dir: str, name: str) -> str:
@@ -96,7 +97,7 @@ def rename_files_by_key(parent_dir, file_dict):
 
     return new_file_paths
 
-def main() -> str:
+def __main() -> str:
     """
     File Handler for Downloaded CSVs
     1. Find downloaded financial statements by each file key
@@ -143,7 +144,7 @@ def main() -> str:
     print('Successfully Moved Downloaded Statement Files to Budgeting Folder')
     return new_month_dir
 
-def main_2():
+def main():
     root_dir = get_user_root_dir()
     downloads_dir = f'{root_dir}/Downloads'
 
@@ -155,6 +156,7 @@ def main_2():
     (highest_year_dir_name, new_month_dir_name) = get_highest_month_dir()
     new_month_dir = make_folder_at_dir(highest_year_dir_name, new_month_dir_name)
 
+    # Move Renamed Transaction Files to 
     for file_key in renamed_statement_files_dict:
         file_path = renamed_statement_files_dict[file_key]
         try:

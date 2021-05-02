@@ -108,9 +108,9 @@ def add_usaa_row(row, sheets_data):
     if row['Category'] == 'Credit Card Payment':
         return
 
-    if amt == 1400:
+    if amt == 2850:
         usaa_data['Category'] = 'Rent'
-        usaa_data['Description'] = 'Venmo Rent Payment'
+        usaa_data['Description'] = 'Rent Payment'
 
     elif amt < 0:
         if 'Schwab' in usaa_data['Description']:

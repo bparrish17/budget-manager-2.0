@@ -1,15 +1,16 @@
 import os, shutil
-from filehandler import main as filehandler
-from filereader import main as filereader
-from sheetswriter import main as sheetswriter
-from reset import main as reset
+from FileHandler import main as FileHandler
+from FileReader import main as FileReader
+from SheetsWriter import main as SheetsWriter
+from reset import reset_for_testing
 
 print('-------------------------------------------------------------------------')
 
-# new_month_dir = '/Users/brianparrish/Documents/Home/Budgeting/2020/8 - August'
-new_month_dir = filehandler()
-sheets_data = filereader(new_month_dir)
-sheetswriter(sheets_data)
+new_month_dir = '/Users/brianparrish/Documents/Finance/2021/4 - April'
+# new_month_dir = FileHandler()
+sheets_data = FileReader(new_month_dir)
+SheetsWriter(sheets_data)
+# reset_for_testing(new_month_dir)
 
 # reset() < use this for testing
 

@@ -20,6 +20,6 @@ def reset_for_testing(new_month_dir: str):
 
 
 def main():
-    new_month_dir = '/Users/brianparrish/Documents/Home/Budgeting/2020/8 - August'
+    # new_month_dir = '/Users/brianparrish/Documents/Home/Budgeting/2020/8 - August'
     reset_for_testing(new_month_dir)
     print('Reset Successful')
